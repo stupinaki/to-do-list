@@ -1,6 +1,11 @@
 <template>
   <div class="to-do-block-wrapper">
-    <input type="checkbox" class="to-do-checkbox">
+    <input
+        type="checkbox"
+        :checked="isSelected"
+        class="to-do-checkbox"
+        @change="onChange"
+    >
     <div> {{ text }} </div>
     <button
         @click="onClick"
@@ -14,7 +19,7 @@
 <script>
 export default {
   name: "ToDoBlock",
-  emits: ["deleteTask"],
+  emits: ["deleteTask", "checkboxChange"],
   props: {
     text: {
       type: String,
@@ -23,11 +28,19 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    isSelected: {
+      type: Boolean,
+      required: true
     }
   },
   methods: {
     onClick () {
       this.$emit("deleteTask", this.$props.id);
+    },
+    onChange() {
+      const { id, text, isSelected } = this.$props;
+      this.$emit("checkboxChange", {id, text, isSelected});
     }
   }
 }

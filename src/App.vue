@@ -1,22 +1,28 @@
 <template>
-
   <div class="to-do-list">
-    <InputComponent @input-change="onChange"/>
+    <InputComponent @input-change="addNewTask"/>
 
-    <div class="select-delete-btns">
-      <button @click="onSelect" class="select-all-btn">
+    <div v-if="tasks.length" class="select-delete-btns">
+      <button @click="selectAll" class="select-all-btn">
         Select all
+      </button>
+      <button @click="removeSelectAll" class="select-all-btn">
+        Remove selection
       </button>
       <button @click="onDelete" class="delete-selected-btn">
         Delete selected
       </button>
     </div>
 
+    <div v-if="!tasks.length" class="empty-list"> Your to-do list is empty </div>
+
     <template v-for="task in tasks" :key="task.id" >
       <ToDoBlock
           :id="task.id"
           :text="task.text"
+          :is-selected="task.isSelected"
           @delete-task="onDeleteTask"
+          @checkbox-change="onCheckboxChange"
       />
     </template>
   </div>
@@ -33,33 +39,70 @@ export default {
     ToDoBlock,
     InputComponent
   },
+  beforeMount() {
+    this.$data.tasks = JSON.parse(localStorage.getItem("myCoolToDoList")) || [];
+  },
   data() {
     return {
-      tasks: [
-        {id: "som1", text: "task 1"},
-        {id: "som2", text: "task 2"},
-        {id: "som3", text: "task 3"},
-        {id: "som4", text: "task 4"},
-      ],
-
+      tasks: [],
+      isAllSelected: false,
     }
   },
   methods: {
     onDeleteTask(id) {
       this.$data.tasks = this.$data.tasks.filter(t => t.id !== id);
+      this.changeLocalStorage();
     },
-    onChange(value) {
+    addNewTask(value) {
+      const isExist = !!this.$data.tasks.find(t => t.text === value);
+      if(isExist) {
+        return;
+      }
       const newTask = {
         id: value,
-        text: value
+        text: value,
+        isSelected: false,
       }
       this.$data.tasks.push(newTask);
+      this.changeLocalStorage();
     },
-    onSelect() {
-      console.log("on select")
+    onCheckboxChange(task) {
+      this.$data.tasks = this.$data.tasks.map(t => {
+        if(t.id === task.id) {
+          return {
+            ...t,
+            isSelected: !t.isSelected,
+          }
+        }
+        return t;
+      });
+      this.changeLocalStorage();
+    },
+    selectAll() {
+      this.$data.tasks = this.$data.tasks.map(t => {
+        return {
+          ...t,
+          isSelected: true
+        }
+      })
+      this.$data.isAllSelected = true;
+      this.changeLocalStorage();
+    },
+    removeSelectAll() {
+      this.$data.tasks = this.$data.tasks.map(t => {
+        return {
+          ...t,
+          isSelected: false
+        }
+      })
+      this.changeLocalStorage();
     },
     onDelete() {
-      console.log("onDelete")
+      this.$data.tasks = this.$data.tasks.filter(t => !t.isSelected);
+      this.changeLocalStorage();
+    },
+    changeLocalStorage() {
+      localStorage.setItem("myCoolToDoList", JSON.stringify(this.$data.tasks));
     }
   }
 }
@@ -73,7 +116,7 @@ export default {
 }
 .select-delete-btns {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
 }
 
@@ -99,6 +142,12 @@ export default {
 
 .delete-selected-btn:hover {
   background-color: #952020;
+}
+
+.empty-list {
+  font-size: 20px;
+  text-align: center;
+  margin-top: 40px;
 }
 
 </style>
