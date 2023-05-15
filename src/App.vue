@@ -1,30 +1,35 @@
 <template>
-  <div class="to-do-list">
-    <InputComponent @input-change="addNewTask"/>
+  <div class="app">
+    <div class="form-btns-wrapper">
+      <InputComponent @input-change="addNewTask"/>
 
-    <div v-if="tasks.length" class="select-delete-btns">
-      <button @click="selectAll" class="select-all-btn">
-        Select all
-      </button>
-      <button @click="removeSelectAll" class="select-all-btn">
-        Remove selection
-      </button>
-      <button @click="onDelete" class="delete-selected-btn">
-        Delete selected
-      </button>
+      <div v-if="tasks.length" class="select-delete-btns">
+        <button @click="selectAll" class="select-all-btn">
+          Select all
+        </button>
+        <button @click="removeSelectAll" class="select-all-btn">
+          Remove selection
+        </button>
+        <button @click="onDelete" class="delete-selected-btn">
+          Delete selected
+        </button>
+      </div>
     </div>
 
-    <div v-if="!tasks.length" class="empty-list"> Your to-do list is empty </div>
+    <div class="to-do-list">
+      <div v-if="!tasks.length" class="empty-list"> Your to-do list is empty </div>
 
-    <template v-for="task in tasks" :key="task.id" >
-      <ToDoBlock
-          :id="task.id"
-          :text="task.text"
-          :is-selected="task.isSelected"
-          @delete-task="onDeleteTask"
-          @checkbox-change="onCheckboxChange"
-      />
-    </template>
+      <template v-for="task in tasks" :key="task.id" >
+        <ToDoBlock
+            :id="task.id"
+            :text="task.text"
+            :is-selected="task.isSelected"
+            @delete-task="onDeleteTask"
+            @checkbox-change="onCheckboxChange"
+        />
+      </template>
+    </div>
+
   </div>
 
 </template>
@@ -109,10 +114,27 @@ export default {
 </script>
 
 <style scoped>
+.app {
+  position: relative;
+}
 .to-do-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+.form-btns-wrapper{
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 30px 8px;
+  margin-bottom: 40px;
+  background: #f5f5f5;
+  box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
+  border-radius: 8px;
 }
 .select-delete-btns {
   display: grid;
@@ -122,7 +144,7 @@ export default {
 
 .select-delete-btns > * {
   padding: 16px;
-  border: 1px solid #f0f0f0;
+  border: none;
   border-radius: 8px;
   box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
   cursor: pointer;

@@ -2,7 +2,7 @@
   <form @submit.prevent="onSubmit" class="form-add">
     <div class="form-input-wrapper">
       <input
-          v-model="inputValue"
+          v-model.trim="inputValue"
           type="text"
           class="form-add-input"
           placeholder="Add new task"
@@ -71,6 +71,7 @@ export default {
   height: 100%;
   width: 100%;
   border: none;
+  background-color: transparent;
 }
 .form-add-input:focus-visible {
   outline: none;
@@ -79,7 +80,7 @@ export default {
 }
 .form-add-btn {
   padding: 16px;
-  border: 1px solid #f0f0f0;
+  border: none;
   border-radius: 8px;
   background-color: palegreen;
   box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
