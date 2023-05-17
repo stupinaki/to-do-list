@@ -1,113 +1,76 @@
 <template>
   <div class="app">
-    <div class="form-btns-wrapper">
-      <InputComponent @input-change="addNewTask"/>
-
-      <div v-if="tasks.length" class="select-delete-btns">
-        <button @click="selectAll" class="select-all-btn">
-          Select all
-        </button>
-        <button @click="removeSelectAll" class="select-all-btn">
-          Remove selection
-        </button>
-        <button @click="onDelete" class="delete-selected-btn">
-          Delete selected
-        </button>
-      </div>
-    </div>
-
-    <div class="to-do-list">
-      <div v-if="!tasks.length" class="empty-list"> Your to-do list is empty </div>
-
-      <template v-for="task in tasks" :key="task.id" >
+    <div class="app-main-block">
+      <InputComponent
+          placeholder="Add new list name"
+          @input-change="addNewListName"
+          class="input-component-wrapper"
+      />
+      <template v-for="block in list" :key="list.id">
         <ToDoBlock
-            :id="task.id"
-            :text="task.text"
-            :is-selected="task.isSelected"
-            @delete-task="onDeleteTask"
-            @checkbox-change="onCheckboxChange"
+            :header="block.header"
+            :todo-block-id="block.id"
+            :data="block.data"
+            @to-do-block-change="addNewToDoIntoList"
+            @delete-to-do-block="onDeleteToDoBlock"
         />
+
       </template>
     </div>
 
-  </div>
+    <SideBar :list="sidebarList"/>
 
+  </div>
 </template>
 
 <script>
-import ToDoBlock from "./components/ToDoBlock.vue";
+import {v4} from "uuid";
 import InputComponent from "./components/InputComponent.vue";
+import ToDoBlock from "./components/ToDoBlock.vue";
+import SideBar from "./components/SideBar.vue";
 
 export default {
   name: "app",
   components: {
+    InputComponent,
     ToDoBlock,
-    InputComponent
-  },
-  beforeMount() {
-    this.$data.tasks = JSON.parse(localStorage.getItem("myCoolToDoList")) || [];
+    SideBar
   },
   data() {
     return {
-      tasks: [],
-      isAllSelected: false,
+      list: []
     }
   },
+  beforeMount() {
+    this.$data.list = JSON.parse(localStorage.getItem("myCoolToDoList")) || [];
+  },
   methods: {
-    onDeleteTask(id) {
-      this.$data.tasks = this.$data.tasks.filter(t => t.id !== id);
-      this.changeLocalStorage();
-    },
-    addNewTask(value) {
-      const isExist = !!this.$data.tasks.find(t => t.text === value);
-      if(isExist) {
-        return;
-      }
-      const newTask = {
-        id: value,
-        text: value,
-        isSelected: false,
-      }
-      this.$data.tasks.push(newTask);
-      this.changeLocalStorage();
-    },
-    onCheckboxChange(task) {
-      this.$data.tasks = this.$data.tasks.map(t => {
-        if(t.id === task.id) {
-          return {
-            ...t,
-            isSelected: !t.isSelected,
-          }
-        }
-        return t;
-      });
-      this.changeLocalStorage();
-    },
-    selectAll() {
-      this.$data.tasks = this.$data.tasks.map(t => {
-        return {
-          ...t,
-          isSelected: true
-        }
-      })
-      this.$data.isAllSelected = true;
-      this.changeLocalStorage();
-    },
-    removeSelectAll() {
-      this.$data.tasks = this.$data.tasks.map(t => {
-        return {
-          ...t,
-          isSelected: false
-        }
+    addNewListName(value) {
+      //todo проверять есть ли такой список уже?
+      this.$data.list.push({
+        id: v4(),
+        header: value,
+        data: []
       })
       this.changeLocalStorage();
     },
-    onDelete() {
-      this.$data.tasks = this.$data.tasks.filter(t => !t.isSelected);
+    addNewToDoIntoList(modifiedList) {
+      this.$data.list = this.$data.list.map(l => l.id === modifiedList.id ? modifiedList : l);
       this.changeLocalStorage();
     },
     changeLocalStorage() {
-      localStorage.setItem("myCoolToDoList", JSON.stringify(this.$data.tasks));
+      localStorage.setItem("myCoolToDoList", JSON.stringify(this.$data.list));
+    },
+    onDeleteToDoBlock(deleteId) {
+      this.$data.list = this.$data.list.filter(l => l.id !== deleteId);
+      this.changeLocalStorage();
+    }
+  },
+  computed: {
+    sidebarList() {
+      return this.$data.list.map(l => {
+        return { id: l.id, header: l.header }
+      })
     }
   }
 }
@@ -116,60 +79,26 @@ export default {
 <style scoped>
 .app {
   position: relative;
+  display: grid;
+  grid-template-columns: 10fr 2fr;
+  gap: 20px;
+  min-height: 100vh;
+  background-color: #8CEE8C57;
+  padding-left: 20px;
 }
-.to-do-list {
+.app-main-block {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 40px;
+  padding-bottom: 20px;
 }
-.form-btns-wrapper{
-  position: sticky;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 30px 8px;
-  margin-bottom: 40px;
+.input-component-wrapper {
+  padding: 16px;
   background: #f5f5f5;
   box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
   border-radius: 8px;
-}
-.select-delete-btns {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
+  margin-top: 20px;
 }
 
-.select-delete-btns > * {
-  padding: 16px;
-  border: none;
-  border-radius: 8px;
-  box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
-  cursor: pointer;
-}
-
-.select-all-btn {
-  background-color: aqua;
-}
-
-.select-all-btn:hover {
-  background-color: #04b1b1;
-}
-
-.delete-selected-btn {
-  background-color: #db3636;
-}
-
-.delete-selected-btn:hover {
-  background-color: #952020;
-}
-
-.empty-list {
-  font-size: 20px;
-  text-align: center;
-  margin-top: 40px;
-}
 
 </style>
