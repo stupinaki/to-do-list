@@ -39,15 +39,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+@import "src/variables.css";
+
 .default-btn-style {
   padding: 16px;
-  border: none;
-  border-radius: 8px;
-  box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
-  cursor: pointer;
   width: 100%;
+  cursor: pointer;
   white-space: normal;
+  border: none;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
 }
 .btn-green {
   background-color: palegreen;

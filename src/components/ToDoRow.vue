@@ -46,22 +46,24 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+@import "src/variables.css";
+
 .to-do-row-wrapper {
   display: grid;
   grid-template-columns: 1fr 10fr 1fr;
   gap: 8px;
   align-items: center;
   padding: 16px;
-  border: 1px solid #f0f0f0;
-  border-radius: 8px;
-  box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
+  border: var(--primary-border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 .to-do-row-btn {
-  border: none;
-  background-color: transparent;
   cursor: pointer;
   max-width: max-content;
+  border: none;
+  background-color: transparent;
 }
 .to-do-row-btn:hover {
   transform: scale(2);

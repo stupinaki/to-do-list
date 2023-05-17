@@ -1,10 +1,12 @@
 <template>
   <div class="to-do-block">
-    <div class="to-do-block-header">
-      <h2> {{ header }} </h2>
-      <ButtonUI bg-color="gray-red" type="button" text="Delete List" @click="deleteToDoBlock"/>
-    </div>
+
     <div class="form-btns-wrapper">
+      <div class="to-do-block-header">
+        <h2> {{ header }} </h2>
+        <ButtonUI bg-color="gray-red" type="button" text="Delete List" @click="deleteToDoBlock"/>
+      </div>
+
       <InputComponent @input-change="addNewTask"/>
 
       <div v-if="tasks.length" class="select-delete-btns">
@@ -15,7 +17,7 @@
     </div>
 
     <div class="to-do-list">
-      <div v-if="!tasks.length" class="empty-list"> {{ `To-do list "${header}" is empty` }} </div>
+      <div v-if="!tasks.length" class="empty-list"> To-do list <strong> «{{header}}» </strong> is empty</div>
       <template v-for="task in tasks" :key="task.id" >
         <ToDoRow
             :id="task.id"
@@ -134,16 +136,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+@import "src/variables.css";
+
 .to-do-block {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 30px;
   padding: 20px;
-  background: #f5f5f5;
-  border-radius: 8px;
-  box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
+  background: var(--primary-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 .to-do-list {
   display: flex;
@@ -159,9 +163,9 @@ export default {
   flex-direction: column;
   gap: 16px;
   padding: 16px;
-  background: #f5f5f5;
-  box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
-  border-radius: 8px;
+  background: var(--primary-bg);
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
 }
 .select-delete-btns {
   display: grid;
@@ -171,7 +175,6 @@ export default {
 .empty-list {
   font-size: 20px;
   text-align: center;
-  margin-top: 40px;
 }
 .to-do-block-header {
   display: grid;
@@ -179,7 +182,14 @@ export default {
   gap: 20px;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+}
+@media screen and (max-width: 600px){
+  .select-delete-btns {
+    gap: 10px;
+  }
+  .empty-list {
+    font-size: 16px;
+  }
 }
 
 </style>

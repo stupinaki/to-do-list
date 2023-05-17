@@ -23,7 +23,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+@import "src/variables.css";
+
 .side-bar-wrapper {
   display: flex;
   flex-direction: column;
@@ -31,9 +33,10 @@ export default {
   align-items: start;
   width: 100%;
   padding: 16px;
-  background: #f5f5f5;
-  border: 1px solid #f0f0f0;
-  box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
+  background: var(--primary-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border: var(--primary-border);
 }
 
 </style>

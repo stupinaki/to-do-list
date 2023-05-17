@@ -65,7 +65,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+@import "src/variables.css";
+
 .form-add {
   display: grid;
   grid-template-columns: 4fr 1fr;
@@ -78,9 +80,9 @@ export default {
   justify-content: space-between;
   gap: 20px;
   padding: 16px;
-  border: 1px solid #f0f0f0;
-  border-radius: 8px;
-  box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
+  border: var(--primary-border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 
 .form-add-input {
