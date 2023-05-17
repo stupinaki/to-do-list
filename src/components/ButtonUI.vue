@@ -47,6 +47,7 @@ export default {
   box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
   cursor: pointer;
   width: 100%;
+  white-space: normal;
 }
 .btn-green {
   background-color: palegreen;
@@ -67,6 +68,12 @@ export default {
 .btn-red:hover,
 .btn-gray-red:hover {
   background-color: #d02d2d;
+}
+
+@media screen and (max-width: 600px){
+  .default-btn-style {
+    padding: 10px;
+  }
 }
 
 </style>

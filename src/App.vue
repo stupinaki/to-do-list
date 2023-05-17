@@ -1,5 +1,6 @@
 <template>
   <div class="app">
+    <SideBar v-if="viewportWidth >= 800" :list="sidebarList"/>
     <div class="app-main-block">
       <InputComponent
           placeholder="Add new list name"
@@ -17,14 +18,12 @@
 
       </template>
     </div>
-
-    <SideBar :list="sidebarList"/>
-
   </div>
 </template>
 
 <script>
 import {v4} from "uuid";
+import throttle from "lodash/throttle";
 import InputComponent from "./components/InputComponent.vue";
 import ToDoBlock from "./components/ToDoBlock.vue";
 import SideBar from "./components/SideBar.vue";
@@ -38,11 +37,17 @@ export default {
   },
   data() {
     return {
-      list: []
+      list: [],
+      viewportWidth: undefined
     }
   },
   beforeMount() {
+    this.$data.viewportWidth = window.innerWidth;
+    window.addEventListener('resize',this.getNewResizeThrottle);
     this.$data.list = JSON.parse(localStorage.getItem("myCoolToDoList")) || [];
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.getNewResizeThrottle);
   },
   methods: {
     addNewListName(value) {
@@ -64,14 +69,20 @@ export default {
     onDeleteToDoBlock(deleteId) {
       this.$data.list = this.$data.list.filter(l => l.id !== deleteId);
       this.changeLocalStorage();
-    }
+    },
+    getNewResize(e) {
+      this.$data.viewportWidth = e.target.innerWidth;
+    },
   },
   computed: {
     sidebarList() {
       return this.$data.list.map(l => {
         return { id: l.id, header: l.header }
       })
-    }
+    },
+    getNewResizeThrottle() {
+      return throttle(this.getNewResize, 1000);
+    },
   }
 }
 </script>
@@ -80,25 +91,34 @@ export default {
 .app {
   position: relative;
   display: grid;
-  grid-template-columns: 10fr 2fr;
+  grid-template-columns: 2fr 10fr;
   gap: 20px;
   min-height: 100vh;
   background-color: #8CEE8C57;
-  padding-left: 20px;
+  font-size: 20px;
 }
 .app-main-block {
   display: flex;
   flex-direction: column;
   gap: 40px;
-  padding-bottom: 20px;
+  padding: 20px;
 }
 .input-component-wrapper {
   padding: 16px;
   background: #f5f5f5;
   box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
   border-radius: 8px;
-  margin-top: 20px;
 }
 
-
+@media screen and (max-width: 800px){
+  .app {
+    grid-template-columns: 1fr;
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 600px){
+  .app {
+    font-size: 14px;
+  }
+}
 </style>
