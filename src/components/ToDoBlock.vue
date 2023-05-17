@@ -4,7 +4,8 @@
     <div class="form-btns-wrapper">
       <div class="to-do-block-header">
         <h2> {{ header }} </h2>
-        <ButtonUI bg-color="gray-red" type="button" text="Delete List" @click="deleteToDoBlock"/>
+        <div/>
+        <ButtonUI bg-color="gray-red" type="button" text="Delete" @click="deleteToDoBlock"/>
       </div>
 
       <InputComponent @input-change="addNewTask"/>
@@ -178,13 +179,14 @@ export default {
 }
 .to-do-block-header {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
   align-items: center;
   justify-content: space-between;
 }
 @media screen and (max-width: 600px){
-  .select-delete-btns {
+  .select-delete-btns,
+  .to-do-block-header {
     gap: 10px;
   }
   .empty-list {
