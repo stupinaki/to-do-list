@@ -1,7 +1,7 @@
 <template>
   <div class="app">
-    <div>
-      <SideBar v-if="viewportWidth > 800" :list="sidebarList"/>
+    <div v-if="viewportWidth > 800">
+      <SideBar :list="sidebarList"/>
     </div>
     <div class="app-main-block">
       <InputComponent
