@@ -1,8 +1,8 @@
 <template>
   <div class="side-bar-wrapper">
-    <template v-for="task in list" :key="task.name">
-      <ButtonUI bg-color="gray-green" type="button" :text="task.header"/>
-    </template>
+     <template v-for="task in list" :key="task.name">
+        <ButtonUI bg-color="gray-green" type="button" :text="task.header" @click="onClick(task.id)"/>
+     </template>
   </div>
 </template>
 
@@ -18,8 +18,14 @@ export default {
     list: {
       type: Array,
       required: true
-    }
+    },
   },
+  methods: {
+    onClick(id) {
+      const target =  document.getElementById(id);
+      target.scrollIntoView({block: "center", inline: "center", behavior: "smooth"});
+    }
+  }
 }
 </script>
 
@@ -27,16 +33,18 @@ export default {
 @import "src/variables.css";
 
 .side-bar-wrapper {
+  position: fixed;
   display: flex;
   flex-direction: column;
-  gap: 20px;
   align-items: start;
-  width: 100%;
+  gap: 20px;
+  width: 200px;
+  height: 100%;
   padding: 16px;
+  overflow-y: auto;
   background: var(--primary-bg);
-  border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
-  border: var(--primary-border);
+  border-right: var(--primary-border);
 }
 
 </style>

@@ -1,20 +1,17 @@
 <template>
-  <div class="to-do-block">
-
+  <div :id="todoBlockId" class="to-do-block">
     <div class="form-btns-wrapper">
       <div class="to-do-block-header">
-        <h2> {{ header }} </h2>
         <div/>
-        <ButtonUI bg-color="gray-red" type="button" text="Delete" @click="deleteToDoBlock"/>
+        <h3 class="to-do-block-header-text"> {{ header }} </h3>
+        <button class="to-do-block-header-delete-btn" @click="deleteToDoBlock"> ❌ </button>
       </div>
-
       <InputComponent @input-change="addNewTask"/>
+    </div>
 
-      <div v-if="tasks.length" class="select-delete-btns">
-        <ButtonUI bg-color="blue" type="button" text="Select all" @click="selectAll"/>
-        <ButtonUI bg-color="blue" type="button" text="Remove selection" @click="removeSelectAll" />
-        <ButtonUI bg-color="red" type="button" text="Delete selected" @click="onDelete" />
-      </div>
+    <div v-if="tasks.length" class="select-delete-btns">
+      <ButtonUI bg-color="blue" type="button" :text="selectBtnText" @click="onSelectBtnClick"/>
+      <ButtonUI bg-color="red" type="button" text="Delete selected" @click="onDelete" />
     </div>
 
     <div class="to-do-list">
@@ -29,7 +26,6 @@
         />
       </template>
     </div>
-
   </div>
 </template>
 
@@ -52,7 +48,6 @@ export default {
   data() {
     return {
       tasks: [],
-      isAllSelected: false,
     }
   },
   props: {
@@ -99,21 +94,11 @@ export default {
       });
       this.changeTodoBlock();
     },
-    selectAll() {
+    onSelectBtnClick() {
       this.$data.tasks = this.$data.tasks.map(t => {
         return {
           ...t,
-          isSelected: true
-        }
-      })
-      this.$data.isAllSelected = true;
-      this.changeTodoBlock();
-    },
-    removeSelectAll() {
-      this.$data.tasks = this.$data.tasks.map(t => {
-        return {
-          ...t,
-          isSelected: false
+          isSelected: !this.isAllSelected
         }
       })
       this.changeTodoBlock();
@@ -132,6 +117,14 @@ export default {
     },
     deleteToDoBlock() {
       this.$emit("deleteToDoBlock", this.$props.todoBlockId);
+    }
+  },
+  computed: {
+    isAllSelected() {
+      return this.$data.tasks.every(t => t.isSelected);
+    },
+    selectBtnText() {
+      return this.isAllSelected ? "Remove selection" : "Select all";
     }
   }
 }
@@ -170,7 +163,7 @@ export default {
 }
 .select-delete-btns {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
 .empty-list {
@@ -179,10 +172,22 @@ export default {
 }
 .to-do-block-header {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
+  grid-template-columns: 1fr 10fr 1fr;
+  gap: 8px;
   align-items: center;
   justify-content: space-between;
+}
+.to-do-block-header-text {
+  text-align: center;
+}
+.to-do-block-header-delete-btn {
+  cursor: pointer;
+  max-width: max-content;
+  border: none;
+  background-color: transparent;
+}
+.to-do-block-header-delete-btn:hover {
+  transform: scale(1.5);
 }
 @media screen and (max-width: 600px){
   .select-delete-btns,

@@ -1,6 +1,8 @@
 <template>
   <div class="app">
-    <SideBar v-if="viewportWidth >= 800" :list="sidebarList"/>
+    <div>
+      <SideBar v-if="viewportWidth > 800" :list="sidebarList"/>
+    </div>
     <div class="app-main-block">
       <InputComponent
           placeholder="Add new list name"
@@ -24,9 +26,9 @@
 <script>
 import {v4} from "uuid";
 import throttle from "lodash/throttle";
-import InputComponent from "./components/InputComponent.vue";
-import ToDoBlock from "./components/ToDoBlock.vue";
 import SideBar from "./components/SideBar.vue";
+import ToDoBlock from "./components/ToDoBlock.vue";
+import InputComponent from "./components/InputComponent.vue";
 
 export default {
   name: "app",
@@ -44,14 +46,13 @@ export default {
   beforeMount() {
     this.$data.viewportWidth = window.innerWidth;
     window.addEventListener('resize',this.getNewResizeThrottle);
-    this.$data.list = JSON.parse(localStorage.getItem("myCoolToDoList")) || [];
+    this.$data.list = JSON.parse(localStorage.getItem("myCoolToDoListInLocalStorage")) || [];
   },
   unmounted() {
     window.removeEventListener('resize', this.getNewResizeThrottle);
   },
   methods: {
     addNewListName(value) {
-      //todo проверять есть ли такой список уже?
       this.$data.list.push({
         id: v4(),
         header: value,
@@ -64,7 +65,7 @@ export default {
       this.changeLocalStorage();
     },
     changeLocalStorage() {
-      localStorage.setItem("myCoolToDoList", JSON.stringify(this.$data.list));
+      localStorage.setItem("myCoolToDoListInLocalStorage", JSON.stringify(this.$data.list));
     },
     onDeleteToDoBlock(deleteId) {
       this.$data.list = this.$data.list.filter(l => l.id !== deleteId);
@@ -91,7 +92,7 @@ export default {
 .app {
   position: relative;
   display: grid;
-  grid-template-columns: 2fr 10fr;
+  grid-template-columns: 200px 1fr;
   gap: 20px;
   min-height: 100vh;
   background-color: #8CEE8C57;

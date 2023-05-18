@@ -11,7 +11,7 @@
         @click="onClick"
         class="to-do-row-btn"
     >
-      x
+      ❌
     </button>
   </div>
 </template>
@@ -66,7 +66,7 @@ export default {
   background-color: transparent;
 }
 .to-do-row-btn:hover {
-  transform: scale(2);
+  transform: scale(1.5);
 }
 .to-do-checkbox {
   cursor: pointer;
