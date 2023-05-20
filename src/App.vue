@@ -9,16 +9,17 @@
           @input-change="addNewListName"
           class="input-component-wrapper"
       />
-      <template v-for="block in list" :key="list.id">
-        <ToDoBlock
-            :header="block.header"
-            :todo-block-id="block.id"
-            :data="block.data"
-            @to-do-block-change="addNewToDoIntoList"
-            @delete-to-do-block="onDeleteToDoBlock"
-        />
-
-      </template>
+      <TransitionGroup name="list" tag="div" class="app-main-block-list">
+        <template v-for="block in list" :key="list.id">
+          <ToDoBlock
+              :header="block.header"
+              :todo-block-id="block.id"
+              :data="block.data"
+              @to-do-block-change="addNewToDoIntoList"
+              @delete-to-do-block="onDeleteToDoBlock"
+          />
+        </template>
+      </TransitionGroup>
     </div>
   </div>
 </template>
@@ -104,11 +105,25 @@ export default {
   gap: 40px;
   padding: 20px;
 }
+.app-main-block-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 .input-component-wrapper {
   padding: 16px;
   background: #f5f5f5;
   box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
   border-radius: 8px;
+}
+.list-enter-active,
+.list-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
 }
 
 @media screen and (max-width: 800px){

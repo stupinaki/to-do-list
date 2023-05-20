@@ -16,15 +16,18 @@
 
     <div class="to-do-list">
       <div v-if="!tasks.length" class="empty-list"> To-do list <strong> «{{header}}» </strong> is empty</div>
-      <template v-for="task in tasks" :key="task.id" >
-        <ToDoRow
-            :id="task.id"
-            :text="task.text"
-            :is-selected="task.isSelected"
-            @delete-task="onDeleteTask"
-            @checkbox-change="onCheckboxChange"
-        />
-      </template>
+
+      <TransitionGroup name="small-task-list" tag="div">
+        <template v-for="task in tasks" :key="task.id" >
+          <ToDoRow
+              :id="task.id"
+              :text="task.text"
+              :is-selected="task.isSelected"
+              @delete-task="onDeleteTask"
+              @checkbox-change="onCheckboxChange"
+          />
+        </template>
+      </TransitionGroup>
     </div>
   </div>
 </template>
@@ -189,6 +192,16 @@ export default {
 .to-do-block-header-delete-btn:hover {
   transform: scale(1.5);
 }
+.small-task-list-enter-active,
+.small-task-list-leave-active {
+  transition: all 0.5s ease;
+}
+.small-task-list-enter-from,
+.small-task-list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
 @media screen and (max-width: 600px){
   .select-delete-btns,
   .to-do-block-header {
