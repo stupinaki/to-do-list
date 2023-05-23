@@ -6,9 +6,24 @@
         class="to-do-checkbox"
         @change="onChange"
     >
-    <div> {{ text }} </div>
+    <div>
+      <input
+          v-if="isEdit"
+          type="text"
+          :value="text"
+          @change="onTextChange"
+          @blur="isEdit = false"
+      >
+      <div v-else> {{ text }} </div>
+    </div>
     <button
         @click="onClick"
+        class="to-do-row-btn"
+    >
+      ✎
+    </button>
+    <button
+        @click="deleteRow"
         class="to-do-row-btn"
     >
       ❌
@@ -19,7 +34,12 @@
 <script>
 export default {
   name: "ToDoBlock",
-  emits: ["deleteTask", "checkboxChange"],
+  emits: ["deleteTask", "checkboxChange", "textChange"],
+  data() {
+    return {
+      isEdit: false,
+    }
+  },
   props: {
     text: {
       type: String,
@@ -35,12 +55,20 @@ export default {
     }
   },
   methods: {
-    onClick () {
+    deleteRow () {
       this.$emit("deleteTask", this.$props.id);
+    },
+    onClick() {
+      this.$data.isEdit = !this.$data.isEdit;
     },
     onChange() {
       const { id, text, isSelected } = this.$props;
       this.$emit("checkboxChange", {id, text, isSelected});
+    },
+    onTextChange(e) {
+      const { id, isSelected } = this.$props;
+      const text = e.target.value;
+      this.$emit("textChange", {id, text, isSelected});
     }
   }
 }
@@ -51,7 +79,7 @@ export default {
 
 .to-do-row-wrapper {
   display: grid;
-  grid-template-columns: 1fr 10fr 1fr;
+  grid-template-columns: 1fr 9fr 1fr 1fr;
   gap: 8px;
   align-items: center;
   padding: 16px;

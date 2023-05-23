@@ -25,6 +25,7 @@
               :is-selected="task.isSelected"
               @delete-task="onDeleteTask"
               @checkbox-change="onCheckboxChange"
+              @text-change="onTextChange"
           />
         </template>
       </TransitionGroup>
@@ -33,6 +34,7 @@
 </template>
 
 <script>
+import {v4} from "uuid";
 import ToDoRow from "./ToDoRow.vue";
 import ButtonUI from "./ButtonUI.vue";
 import InputComponent from "./InputComponent.vue";
@@ -78,11 +80,23 @@ export default {
         return;
       }
       const newTask = {
-        id: value,
+        id: v4(),
         text: value,
         isSelected: false,
       }
       this.$data.tasks.push(newTask);
+      this.changeTodoBlock();
+    },
+    onTextChange(task) {
+      this.$data.tasks = this.$data.tasks.map(t => {
+        if(t.id === task.id) {
+          return {
+            ...t,
+            text: task.text,
+          }
+        }
+        return t;
+      });
       this.changeTodoBlock();
     },
     onCheckboxChange(task) {
