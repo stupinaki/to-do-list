@@ -9,15 +9,22 @@
     <div>
       <input
           v-if="isEdit"
+          id="inputRowEditText"
           type="text"
           :value="text"
           @change="onTextChange"
           @blur="isEdit = false"
       >
-      <div v-else> {{ text }} </div>
+      <div
+          v-else
+          :class="textStyle"
+          @click="onTextClick"
+      >
+        {{ text }}
+      </div>
     </div>
     <button
-        @click="onClick"
+        @click="isEdit = !isEdit"
         class="to-do-row-btn"
     >
       ✎
@@ -34,7 +41,7 @@
 <script>
 export default {
   name: "ToDoBlock",
-  emits: ["deleteTask", "checkboxChange", "textChange"],
+  emits: ["deleteTask", "checkboxChange", "textChange", "rowTextClick"],
   data() {
     return {
       isEdit: false,
@@ -52,23 +59,33 @@ export default {
     isSelected: {
       type: Boolean,
       required: true
+    },
+    isCrossedOut: {
+      type: Boolean,
+      required: true
     }
   },
   methods: {
     deleteRow () {
       this.$emit("deleteTask", this.$props.id);
     },
-    onClick() {
-      this.$data.isEdit = !this.$data.isEdit;
-    },
     onChange() {
-      const { id, text, isSelected } = this.$props;
-      this.$emit("checkboxChange", {id, text, isSelected});
+      const { id, isSelected } = this.$props;
+      this.$emit("checkboxChange", {id, keyName: "isSelected", value: !isSelected});
     },
     onTextChange(e) {
-      const { id, isSelected } = this.$props;
+      const { id } = this.$props;
       const text = e.target.value;
-      this.$emit("textChange", {id, text, isSelected});
+      this.$emit("textChange", {id, keyName: "text", value: text});
+    },
+    onTextClick() {
+      const { id, isCrossedOut } = this.$props;
+      this.$emit("rowTextClick", { id, keyName: "isCrossedOut", value: !isCrossedOut });
+    },
+  },
+  computed: {
+    textStyle() {
+      return this.$props.isCrossedOut ? "crossed-out-text" : "normal-text";
     }
   }
 }
@@ -98,5 +115,11 @@ export default {
 }
 .to-do-checkbox {
   cursor: pointer;
+}
+.crossed-out-text {
+  text-decoration: line-through;
+}
+.normal-text {
+  text-decoration: none;
 }
 </style>

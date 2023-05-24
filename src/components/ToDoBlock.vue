@@ -11,7 +11,7 @@
 
     <div v-if="tasks.length" class="select-delete-btns">
       <ButtonUI bg-color="blue" type="button" :text="selectBtnText" @click="onSelectBtnClick"/>
-      <ButtonUI bg-color="red" type="button" text="Delete selected" @click="onDelete" />
+      <ButtonUI bg-color="red" type="button" text="Delete selected" @click="onDeleteTask" />
     </div>
 
     <div class="to-do-list">
@@ -23,9 +23,11 @@
               :id="task.id"
               :text="task.text"
               :is-selected="task.isSelected"
+              :is-crossed-out="task.isCrossedOut"
               @delete-task="onDeleteTask"
-              @checkbox-change="onCheckboxChange"
-              @text-change="onTextChange"
+              @checkbox-change="onRowChange"
+              @text-change="onRowChange"
+              @row-text-click="onRowChange"
           />
         </template>
       </TransitionGroup>
@@ -70,8 +72,8 @@ export default {
     }
   },
   methods: {
-    onDeleteTask(id) {
-      this.$data.tasks = this.$data.tasks.filter(t => t.id !== id);
+    onDeleteTask(id = undefined) {
+      this.$data.tasks =  id ? this.$data.tasks.filter(t => t.id !== id) : this.$data.tasks.filter(t => !t.isSelected);
       this.changeTodoBlock();
     },
     addNewTask(value) {
@@ -83,28 +85,17 @@ export default {
         id: v4(),
         text: value,
         isSelected: false,
+        isCrossedOut: false,
       }
       this.$data.tasks.push(newTask);
       this.changeTodoBlock();
     },
-    onTextChange(task) {
+    onRowChange(data) {
       this.$data.tasks = this.$data.tasks.map(t => {
-        if(t.id === task.id) {
+        if(t.id === data.id) {
           return {
             ...t,
-            text: task.text,
-          }
-        }
-        return t;
-      });
-      this.changeTodoBlock();
-    },
-    onCheckboxChange(task) {
-      this.$data.tasks = this.$data.tasks.map(t => {
-        if(t.id === task.id) {
-          return {
-            ...t,
-            isSelected: !t.isSelected,
+            [data.keyName]: data.value,
           }
         }
         return t;
@@ -118,10 +109,6 @@ export default {
           isSelected: !this.isAllSelected
         }
       })
-      this.changeTodoBlock();
-    },
-    onDelete() {
-      this.$data.tasks = this.$data.tasks.filter(t => !t.isSelected);
       this.changeTodoBlock();
     },
     changeTodoBlock() {
