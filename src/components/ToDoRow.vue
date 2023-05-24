@@ -12,6 +12,7 @@
           id="inputRowEditText"
           type="text"
           :value="text"
+          class="input-edit-text"
           @change="onTextChange"
           @blur="isEdit = false"
       >
@@ -116,10 +117,18 @@ export default {
 .to-do-checkbox {
   cursor: pointer;
 }
+.input-edit-text {
+  background-color: transparent;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #adadad;
+}
 .crossed-out-text {
+  cursor: pointer;
   text-decoration: line-through;
 }
 .normal-text {
+  cursor: pointer;
   text-decoration: none;
 }
 </style>
