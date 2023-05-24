@@ -154,7 +154,7 @@ export default {
 }
 .form-btns-wrapper{
   position: sticky;
-  top: 0;
+  top: 100px;
   left: 0;
   right: 0;
   display: flex;

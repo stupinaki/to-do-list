@@ -46,5 +46,17 @@ export default {
   box-shadow: var(--box-shadow);
   border-right: var(--primary-border);
 }
-
+@media screen  and (max-width: 800px) {
+  .side-bar-wrapper {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    z-index: 20;
+  }
+}
 </style>

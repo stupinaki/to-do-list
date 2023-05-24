@@ -3,8 +3,20 @@
     <div v-if="viewportWidth > 800">
       <SideBar :list="sidebarList"/>
     </div>
+    <div v-else>
+      <div class="menu-mobile">
+        <button class="menu-burger-btn" @click="isMenuOpen = !isMenuOpen"> {{ burgerBtnText }} </button>
+        <InputComponent
+            placeholder="Add new list name"
+            @input-change="addNewListName"
+        />
+      </div>
+      <SideBar v-if="isMenuOpen" :list="sidebarList" @click="isMenuOpen = false"/>
+    </div>
+
     <div class="app-main-block">
       <InputComponent
+          v-if="viewportWidth > 800"
           placeholder="Add new list name"
           @input-change="addNewListName"
           class="input-component-wrapper"
@@ -41,7 +53,8 @@ export default {
   data() {
     return {
       list: [],
-      viewportWidth: undefined
+      viewportWidth: undefined,
+      isMenuOpen: false
     }
   },
   beforeMount() {
@@ -85,11 +98,16 @@ export default {
     getNewResizeThrottle() {
       return throttle(this.getNewResize, 1000);
     },
+    burgerBtnText() {
+      return this.$data.isMenuOpen ? "✕" : "☰";
+    },
   }
 }
 </script>
 
 <style scoped>
+@import "src/variables.css";
+
 .app {
   position: relative;
   display: grid;
@@ -112,9 +130,29 @@ export default {
 }
 .input-component-wrapper {
   padding: 16px;
-  background: #f5f5f5;
-  box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
+  background: var(--primary-bg);
+  box-shadow: var(--box-shadow);
   border-radius: 8px;
+}
+.menu-mobile {
+  position: fixed;
+  display: grid;
+  grid-template-columns: 1fr 11fr;
+  width: 100%;
+  height: 100px;
+  z-index: 30;
+  background-color: var(--primary-bg);
+  border-bottom: var(--primary-border);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+}
+.menu-burger-btn {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+.menu-burger-btn:hover {
+  transform: scale(1.5);
 }
 .list-enter-active,
 .list-leave-active {
@@ -129,6 +167,8 @@ export default {
 @media screen and (max-width: 800px){
   .app {
     grid-template-columns: 1fr;
+    grid-template-rows: 100px 1fr;
+    gap: 0;
     font-size: 16px;
   }
 }
