@@ -154,7 +154,7 @@ export default {
 }
 .form-btns-wrapper{
   position: sticky;
-  top: 100px;
+  top: 0;
   left: 0;
   right: 0;
   display: flex;
@@ -202,7 +202,11 @@ export default {
   opacity: 0;
   transform: translateX(30px);
 }
-
+@media screen and (max-width: 800px){
+  .form-btns-wrapper{
+    top: var(--menu-mobile-height);
+  }
+}
 @media screen and (max-width: 600px){
   .select-delete-btns,
   .to-do-block-header {

@@ -2,5 +2,7 @@
     --box-shadow: 1px 8px 12px #3a3c4c14, 1px 1px 2px #3a3c4c0a;
     --border-radius: 8px;
     --primary-bg: #f5f5f5;
-    --primary-border: 1px solid #f0f0f0
+    --primary-border: 1px solid #f0f0f0;
+    --menu-mobile-height:  100px;
+    --menu-desktop-width: 200px;
 }

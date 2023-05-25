@@ -38,7 +38,7 @@ export default {
   flex-direction: column;
   align-items: start;
   gap: 20px;
-  width: 200px;
+  width: var(--menu-desktop-width);
   height: 100%;
   padding: 16px;
   overflow-y: auto;
@@ -49,7 +49,7 @@ export default {
 @media screen  and (max-width: 800px) {
   .side-bar-wrapper {
     position: fixed;
-    top: 100px;
+    top: var(--menu-mobile-height);
     left: 0;
     right: 0;
     bottom: 0;

@@ -111,7 +111,7 @@ export default {
 .app {
   position: relative;
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: var(--menu-desktop-width) 1fr;
   gap: 20px;
   min-height: 100vh;
   background-color: #8CEE8C57;
@@ -139,7 +139,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 11fr;
   width: 100%;
-  height: 100px;
+  height: var(--menu-mobile-height);
   z-index: 30;
   background-color: var(--primary-bg);
   border-bottom: var(--primary-border);
@@ -167,7 +167,7 @@ export default {
 @media screen and (max-width: 800px){
   .app {
     grid-template-columns: 1fr;
-    grid-template-rows: 100px 1fr;
+    grid-template-rows: var(--menu-mobile-height) 1fr;
     gap: 0;
     font-size: 16px;
   }
