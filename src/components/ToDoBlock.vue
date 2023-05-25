@@ -134,7 +134,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 @import "src/variables.css";
 
 .to-do-block {
@@ -201,11 +201,6 @@ export default {
 .small-task-list-leave-to {
   opacity: 0;
   transform: translateX(30px);
-}
-@media screen and (max-width: 800px){
-  .form-btns-wrapper{
-    top: var(--menu-mobile-height);
-  }
 }
 @media screen and (max-width: 600px){
   .select-delete-btns,

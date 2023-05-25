@@ -8,16 +8,17 @@
     >
     <div>
       <input
-          v-if="isEdit"
-          id="inputRowEditText"
+          v-show="isEdit"
+          ref="inputRowEditText"
           type="text"
           :value="text"
           class="input-edit-text"
           @change="onTextChange"
           @blur="isEdit = false"
+          @focus="onFocus"
       >
       <div
-          v-else
+          v-show="!isEdit"
           :class="textStyle"
           @click="onTextClick"
       >
@@ -25,7 +26,7 @@
       </div>
     </div>
     <button
-        @click="isEdit = !isEdit"
+        @click="onEditClick"
         class="to-do-row-btn"
     >
       ✎
@@ -83,6 +84,14 @@ export default {
       const { id, isCrossedOut } = this.$props;
       this.$emit("rowTextClick", { id, keyName: "isCrossedOut", value: !isCrossedOut });
     },
+    onFocus(e) {
+      e.target.select();
+    },
+    onEditClick() {
+      this.$data.isEdit = !this.$data.isEdit;
+      //todo
+    }
+
   },
   computed: {
     textStyle() {
@@ -92,7 +101,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 @import "src/variables.css";
 
 .to-do-row-wrapper {
@@ -121,7 +130,7 @@ export default {
   background-color: transparent;
   width: 100%;
   border: none;
-  border-bottom: 1px solid #adadad;
+  border-bottom: 1px solid #cacaca;
 }
 .crossed-out-text {
   cursor: pointer;

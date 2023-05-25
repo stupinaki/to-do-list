@@ -23,13 +23,13 @@ export default {
   methods: {
     onClick(id) {
       const target =  document.getElementById(id);
-      target.scrollIntoView({block: "center", inline: "center", behavior: "smooth"});
+      target.scrollIntoView({block: "start", inline: "center", behavior: "smooth"});
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 @import "src/variables.css";
 
 .side-bar-wrapper {

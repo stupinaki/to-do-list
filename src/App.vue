@@ -78,15 +78,15 @@ export default {
       this.$data.list = this.$data.list.map(l => l.id === modifiedList.id ? modifiedList : l);
       this.changeLocalStorage();
     },
-    changeLocalStorage() {
-      localStorage.setItem("myCoolToDoListInLocalStorage", JSON.stringify(this.$data.list));
-    },
     onDeleteToDoBlock(deleteId) {
       this.$data.list = this.$data.list.filter(l => l.id !== deleteId);
       this.changeLocalStorage();
     },
     getNewResize(e) {
       this.$data.viewportWidth = e.target.innerWidth;
+    },
+    changeLocalStorage() {
+      localStorage.setItem("myCoolToDoListInLocalStorage", JSON.stringify(this.$data.list));
     },
   },
   computed: {
@@ -109,7 +109,6 @@ export default {
 @import "src/variables.css";
 
 .app {
-  position: relative;
   display: grid;
   grid-template-columns: var(--menu-desktop-width) 1fr;
   gap: 20px;
@@ -122,6 +121,8 @@ export default {
   flex-direction: column;
   gap: 40px;
   padding: 20px;
+  height: 100vh;
+  overflow-y: scroll;
 }
 .app-main-block-list {
   display: flex;
@@ -135,7 +136,6 @@ export default {
   border-radius: 8px;
 }
 .menu-mobile {
-  position: fixed;
   display: grid;
   grid-template-columns: 1fr 11fr;
   width: 100%;
@@ -158,7 +158,6 @@ export default {
 .list-leave-active {
   transition: opacity 0.5s ease;
 }
-
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
@@ -170,6 +169,14 @@ export default {
     grid-template-rows: var(--menu-mobile-height) 1fr;
     gap: 0;
     font-size: 16px;
+  }
+  .app-main-block {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 20px;
+    height: calc(100vh - var(--menu-mobile-height));
+    overflow-y: scroll;
   }
 }
 @media screen and (max-width: 600px){
