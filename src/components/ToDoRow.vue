@@ -9,7 +9,6 @@
     <div>
       <input
           v-show="isEdit"
-          ref="inputRowEditText"
           type="text"
           :value="text"
           class="input-edit-text"
@@ -26,7 +25,7 @@
       </div>
     </div>
     <button
-        @click="onEditClick"
+        @click="isEdit = !isEdit"
         class="to-do-row-btn"
     >
       ✎
@@ -87,11 +86,6 @@ export default {
     onFocus(e) {
       e.target.select();
     },
-    onEditClick() {
-      this.$data.isEdit = !this.$data.isEdit;
-      //todo
-    }
-
   },
   computed: {
     textStyle() {
