@@ -106,6 +106,6 @@ export default {
 }
 
 .form-delete-btn:hover {
-  transform: scale(2);
+  transform: scale(1.5);
 }
 </style>

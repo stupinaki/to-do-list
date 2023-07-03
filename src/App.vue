@@ -115,6 +115,7 @@ export default {
   min-height: 100vh;
   background-color: #8CEE8C57;
   font-size: 20px;
+  font-family: "Open Sans",serif;
 }
 .app-main-block {
   display: flex;
