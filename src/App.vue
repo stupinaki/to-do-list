@@ -128,6 +128,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-bottom: 100px;
 }
 .input-component-wrapper {
   padding: 16px;
