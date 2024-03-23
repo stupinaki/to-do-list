@@ -3,6 +3,7 @@
     <div v-if="viewportWidth > 800">
       <SideBar :list="sidebarList"/>
     </div>
+
     <div v-else>
       <div class="menu-mobile">
         <button class="menu-burger-btn" @click="isMenuOpen = !isMenuOpen"> {{ burgerBtnText }} </button>
@@ -67,7 +68,7 @@ export default {
   },
   methods: {
     addNewListName(value) {
-      this.$data.list.push({
+      this.$data.list.unshift({
         id: v4(),
         header: value,
         data: []
